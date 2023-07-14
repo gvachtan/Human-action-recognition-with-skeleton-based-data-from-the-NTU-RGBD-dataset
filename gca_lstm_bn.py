@@ -5,11 +5,9 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.utils.data as data_utils
-from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from torch.optim.lr_scheduler import StepLR
 import glob
-from sklearn.preprocessing import StandardScaler
 from torch.utils.data import Dataset
 from torch.utils.data import DataLoader
 import torch.nn.functional as F
@@ -17,12 +15,13 @@ import torch.nn.functional as F
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Set the path to your numpy files
-path = "/content/ntu_npy"
+path = "the path to your data"
 files = glob.glob(os.path.join(path, '*.npy'))
 
 # Define a regular expression to extract numeric values
 pattern = re.compile(r'\d+\.?\d*')
 
+# The average number of frames is 80, the max number is 300
 frame_count = 165
 joint_count = 25
 joint_dim = 3
@@ -90,6 +89,7 @@ test_dataset = data_utils.Subset(dataset, test_indices)
 train_dataloader = data_utils.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 test_dataloader = data_utils.DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
+# Create the model
 class MultiHeadAttention(nn.Module):
     def __init__(self, hidden_size, num_heads):
         super(MultiHeadAttention, self).__init__()
