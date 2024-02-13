@@ -15,7 +15,7 @@ import torch.nn.functional as F
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Set the path to your numpy files
-path = "the path to your data"
+path = "replace with the path to your data"
 files = glob.glob(os.path.join(path, '*.npy'))
 
 # Define a regular expression to extract numeric values
@@ -152,15 +152,15 @@ class GCA_LSTM(nn.Module):
     def forward(self, x):
         x = x.permute(0, 2, 1)  # Change the order of dimensions to (batch_size, num_features, sequence_length)
         x = self.bn(x)
-        x = x.permute(0, 2, 1)  # Change the order of dimensions back to (batch_size, sequence_length, num_features)
+        x = x.permute(0, 2, 1)  
         output, _ = self.lstm(x)
-        output = output.permute(0, 2, 1)  # Change the order of dimensions to (batch_size, hidden_size, sequence_length)
+        output = output.permute(0, 2, 1)  
         output = self.lstm_bn(output)
-        output = output.permute(0, 2, 1)  # Change the order of dimensions back to (batch_size, sequence_length, hidden_size)
+        output = output.permute(0, 2, 1)  
         output = self.attention(output, output, output)
-        output = output.permute(0, 2, 1)  # Change the order of dimensions to (batch_size, hidden_size, sequence_length)
+        output = output.permute(0, 2, 1)  
         output = self.attention_bn(output)
-        output = output.permute(0, 2, 1)  # Change the order of dimensions back to (batch_size, sequence_length, hidden_size)
+        output = output.permute(0, 2, 1)  
         output = torch.mean(output, dim=1)
         output = self.dropout(output)
         output = self.fc(output)
